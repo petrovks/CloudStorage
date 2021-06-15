@@ -3,22 +3,37 @@ package ru.gb.client.JavaFX;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 import ru.gb.client.FileInfo;
+import ru.gb.client.Netty.Network;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ResourceBundle;
 
-public class MainWindowController {
+public class MainWindowController implements Initializable{
+    private Network network;
+
     @FXML
     VBox leftPanel, rightPanel;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        network = new Network((args) -> {
+            //Alert alert = new Alert(Alert.AlertType.NONE,"Началось!!!", ButtonType.OK);
+        });
+    }
+
     public void btnExitAction(ActionEvent actionEvent) {
+        network.close();
         Platform.exit();
     }
 
@@ -48,6 +63,7 @@ public class MainWindowController {
         try {
             Files.copy(srcPath, dstPath);
             dstPC.updateList(Paths.get(dstPC.getCurrentPath()));
+            network.sendMessage("Копировать файл - " + srcPC.getSelectedFilename());
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось скопировать указанный файл", ButtonType.OK);
             alert.showAndWait();
@@ -114,9 +130,11 @@ public class MainWindowController {
             Files.delete(srcPath);
             srcPC.updateList(Paths.get(srcPC.getCurrentPath()));
             //dstPC.updateList(Paths.get(dstPC.getCurrentPath()));
+
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось переместить указанный файл", ButtonType.OK);
             alert.showAndWait();
         }
     }
+
 }

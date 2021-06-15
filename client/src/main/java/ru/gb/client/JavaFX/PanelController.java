@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -61,7 +60,7 @@ public class PanelController implements Initializable {
                 }
             };
         });
-        fileSizeColumn.setPrefWidth(120);
+        fileSizeColumn.setPrefWidth(150);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         TableColumn<FileInfo, String> fileDateColumn = new TableColumn<>("Дата изменения");
